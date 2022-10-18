@@ -24,6 +24,15 @@ public class MesaController {
 
     @GetMapping()
     public ResponseEntity<List<Mesa>> lista(){
-        return ResponseEntity.ok().body(this.mesaServiceImpl.Listar());
+        return ResponseEntity.ok(this.mesaServiceImpl.Listar());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Mesa> buscar(@PathVariable Long id){
+        Mesa mesa = this.mesaServiceImpl.buscar(id);
+        if (mesa == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(mesa);
     }
 }
