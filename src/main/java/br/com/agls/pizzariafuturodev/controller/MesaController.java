@@ -2,7 +2,6 @@ package br.com.agls.pizzariafuturodev.controller;
 
 import br.com.agls.pizzariafuturodev.entity.Mesa;
 import br.com.agls.pizzariafuturodev.service.MesaServiceImpl;
-import br.com.agls.pizzariafuturodev.service.interfaces.MesaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,7 @@ public class MesaController {
 
     @GetMapping()
     public ResponseEntity<List<Mesa>> lista(){
-        return ResponseEntity.ok(this.mesaServiceImpl.Listar());
+        return ResponseEntity.ok(this.mesaServiceImpl.listar());
     }
 
     @GetMapping("/{id}")
@@ -34,5 +33,20 @@ public class MesaController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.ok(mesa);
+    }
+
+    @GetMapping("/ativas")
+    public ResponseEntity<List<Mesa>> mesaAtivas(){
+        return ResponseEntity.ok(mesaServiceImpl.listarAtivas());
+    }
+
+    @PutMapping("/{id}")
+    public Mesa mesa(@PathVariable Long id, @RequestBody Mesa mesa){
+        return mesaServiceImpl.atualizar(id,mesa);
+    }
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/{id}")
+    public void excluir(@PathVariable Long id){
+        mesaServiceImpl.excluir(id);
     }
 }

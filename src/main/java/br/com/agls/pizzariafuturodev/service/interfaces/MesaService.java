@@ -7,9 +7,11 @@ import java.util.List;
 public interface MesaService {
 
     Mesa salvar(Mesa mesa);
-    Mesa atualizar(Mesa mesa);
+    Mesa atualizar(Long id, Mesa mesa);
     Mesa buscar(Long id);
-    List<Mesa> Listar();
+    List<Mesa> listar();
     void excluir(Long id);
+
+    List<Mesa> listarAtivas();
 
 }
