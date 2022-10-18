@@ -34,7 +34,7 @@ public class MesaServiceImpl implements MesaService {
 
     @Override
     public List<Mesa> Listar() {
-        return null;
+        return mesaRepository.findAll();
     }
 
     @Override
