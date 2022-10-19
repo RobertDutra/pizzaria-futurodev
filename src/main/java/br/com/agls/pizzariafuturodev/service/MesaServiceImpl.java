@@ -76,12 +76,12 @@ public class MesaServiceImpl implements MesaService {
     }
 
     @Override
-    public void excluir(Long id) {
+    public String excluir(Long id) {
         Optional<Mesa> mesa = this.mesaRepository.findById(id);
-        if(mesa.isPresent()){
+        if(mesa.isPresent()) {
             mesaRepository.delete(mesa.get());
-        } else if (mesa.isEmpty()) {
-            System.out.println("Id: " + id + " não encontrado" );
+            return "Excluido com sucesso";
         }
+        return "Id não encontrado";
     }
 }

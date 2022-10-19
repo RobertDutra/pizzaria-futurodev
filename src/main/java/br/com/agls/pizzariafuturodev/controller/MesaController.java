@@ -40,13 +40,14 @@ public class MesaController {
         return ResponseEntity.ok(mesaServiceImpl.listarAtivas());
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
     public Mesa mesa(@PathVariable Long id, @RequestBody Mesa mesa){
         return mesaServiceImpl.atualizar(id,mesa);
     }
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
-    public void excluir(@PathVariable Long id){
-        mesaServiceImpl.excluir(id);
+    public String excluir(@PathVariable Long id){
+        return mesaServiceImpl.excluir(id);
     }
 }
