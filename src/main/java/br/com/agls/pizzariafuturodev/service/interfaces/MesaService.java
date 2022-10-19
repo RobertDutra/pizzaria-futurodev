@@ -11,7 +11,6 @@ public interface MesaService {
     Mesa buscar(Long id);
     List<Mesa> listar();
     String excluir(Long id);
-
     List<Mesa> listarAtivas();
 
 }

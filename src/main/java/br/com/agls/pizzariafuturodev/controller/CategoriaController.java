@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -17,31 +18,31 @@ public class CategoriaController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
-    public Categoria cadastrar(@RequestBody Categoria categoria){
-        return categoriaService.salvar(categoria);
+    public Categoria cadastrar(@RequestBody @Valid Categoria categoria){
+        return this.categoriaService.salvar(categoria);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping()
     public List<Categoria> listar(){
-        return categoriaService.listar();
+        return this.categoriaService.listar();
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public Categoria buscar(@PathVariable Long id){
-        return categoriaService.buscar(id);
+        return this.categoriaService.buscar(id);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
-    public Categoria atualizar(@PathVariable Long id, @RequestBody Categoria categoria){
-        return categoriaService.atualizar(id, categoria);
+    public Categoria atualizar(@PathVariable Long id, @RequestBody @Valid Categoria categoria){
+        return this.categoriaService.atualizar(id, categoria);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
     public String deletar(@PathVariable Long id){
-        return categoriaService.excluir(id);
+        return this.categoriaService.excluir(id);
     }
 }
