@@ -30,7 +30,6 @@ public class MesaServiceImpl implements MesaService {
 
 
     @Override
-    public Mesa atualizar(Mesa mesa) {
     public Mesa atualizar(@PathVariable Long id, @RequestBody Mesa mesa) {
         Optional<Mesa> mesa1 = mesaRepository.findById(id);
         if (mesa1.isPresent()){
@@ -51,13 +50,11 @@ public class MesaServiceImpl implements MesaService {
     }
 
     @Override
-    public List<Mesa> Listar() {
     public List<Mesa> listar() {
         return mesaRepository.findAll();
     }
 
     @Override
-    public void excluir(Long id) {
     public List<Mesa> listarAtivas() {
 //        List<Mesa> mesa = mesaRepository.findAll().stream().filter(mesa1 -> mesa1.getStatus() == true).collect(Collectors.toList());
         List<Mesa> mesa = mesaRepository.findAll();
