@@ -7,6 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityExistsException;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +19,10 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     public Categoria salvar(Categoria categoria) {
-        return this.categoriaRepository.save(categoria);
+        boolean isNomeExistente = categoriaRepository.existsByNome(categoria.getNome());
+        if (!isNomeExistente){
+            return this.categoriaRepository.save(categoria);}
+        else throw new EntityExistsException("Já existe uma categoria com o nome: " + categoria.getNome());
     }
 
     @Override
