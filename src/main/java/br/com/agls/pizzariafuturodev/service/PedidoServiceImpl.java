@@ -44,7 +44,7 @@ public class PedidoServiceImpl implements PedidoService {
             return this.pedidoRepository.save(pedidoPesquisado);
         }
 
-        return pedidoPesquisado;
+        return null;
 
     }
 

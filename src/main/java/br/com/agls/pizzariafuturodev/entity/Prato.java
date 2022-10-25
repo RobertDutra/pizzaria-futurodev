@@ -1,6 +1,7 @@
 package br.com.agls.pizzariafuturodev.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,7 @@ public class Prato {
     private Categoria categoria;
     // alter table add constraint forenig_key categoria references categoria(id);
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonBackReference
     @ManyToMany(mappedBy = "pedidoPrato")
     private List<Pedido> pedido;
