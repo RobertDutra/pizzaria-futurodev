@@ -31,7 +31,7 @@ public class MesaServiceImpl implements MesaService {
 
 
     @Override
-    public Mesa atualizar(@PathVariable Long id, @RequestBody Mesa mesa) {
+    public Mesa atualizar(Long id, Mesa mesa) {
         Optional<Mesa> mesa1 = mesaRepository.findById(id);
         if (mesa1.isPresent()){
             BeanUtils.copyProperties(mesa, mesa1.get(),"id");
