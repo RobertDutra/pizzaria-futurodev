@@ -102,7 +102,7 @@ public class PedidoServiceImpl implements PedidoService {
         Cartao cartaoSelecionado = this.cartaoService.buscarPeloNumeroCartaoClienteId(numeroCartao,pedido.getCliente().getId());
 
         cartaoSelecionado.setSaldo(cartaoSelecionado.getLimite());
-
+        cartaoSelecionado.setLimiteUtilizado(0.0);
         if (cartaoSelecionado.getSaldo() >= valorConta){
             try {
                 cartaoSelecionado.setLimiteUtilizado(cartaoSelecionado.getLimiteUtilizado() + valorConta);
