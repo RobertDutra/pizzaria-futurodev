@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -51,9 +52,9 @@ public class PedidoController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PutMapping("fechar-conta/{idPedido}")
-    public Pedido fecharConta(@PathVariable Long idPedido) {
-        return this.pedidoService.fecharConta(idPedido);
+    @PutMapping("fechar-conta/{id}")
+    public Pedido fecharConta(@PathVariable Long id, @PathParam("numeroCartao") String numeroCartao) {
+        return this.pedidoService.fecharConta(id, numeroCartao);
     }
 
     @DeleteMapping("/{id}")

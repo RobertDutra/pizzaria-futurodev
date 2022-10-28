@@ -1,8 +1,11 @@
 package br.com.agls.pizzariafuturodev.service;
 
+import br.com.agls.pizzariafuturodev.entity.Cartao;
 import br.com.agls.pizzariafuturodev.entity.Mesa;
 import br.com.agls.pizzariafuturodev.entity.Pedido;
 import br.com.agls.pizzariafuturodev.entity.Prato;
+import br.com.agls.pizzariafuturodev.excpetion.FalhaNoPagamentoException;
+import br.com.agls.pizzariafuturodev.excpetion.SaldoInsuficienteException;
 import br.com.agls.pizzariafuturodev.repository.PedidoRepository;
 import br.com.agls.pizzariafuturodev.service.interfaces.MesaService;
 import br.com.agls.pizzariafuturodev.service.interfaces.PedidoService;
@@ -22,6 +25,9 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Autowired
     private MesaService mesaService;
+
+    @Autowired
+    private CartaoServiceImpl cartaoService;
 
     @Override
     public Pedido salvar(Pedido pedido) {
@@ -55,13 +61,9 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public Pedido buscar(Long id) {
-        Optional<Pedido> pedido = this.pedidoRepository.findById(id);
-
-        if (pedido.isEmpty()){
+        return this.pedidoRepository.findById(id).orElseThrow(() -> {
             throw  new EntityNotFoundException("Não foi possível encontrar um pedido com id " + id);
-        }
-
-        return pedido.get();
+        });
     }
 
     @Override
@@ -75,14 +77,15 @@ public class PedidoServiceImpl implements PedidoService {
         return "Id " + id + " não encontrado!";
     }
 
-    public Pedido fecharConta(Long idPedido) {
+    @Override
+    public Pedido fecharConta(Long idPedido, String numeroCartao) {
         Pedido pedidoFechado = null;
-        Pedido pedidoPesquisado = buscar(idPedido);
+        Pedido pedidoPesquisado = this.buscar(idPedido);
         Double valorConta = calcularValorConta(pedidoPesquisado.getPedidoPrato());
         pedidoPesquisado.setValor(valorConta);
 
         //TODO Implementar pagamento.
-        pedidoPesquisado.setPago(true);
+        fazerPagamento(pedidoPesquisado, numeroCartao);
 
         try {
             pedidoFechado = this.pedidoRepository.save(pedidoPesquisado);
@@ -94,6 +97,26 @@ public class PedidoServiceImpl implements PedidoService {
         return pedidoFechado;
     }
 
+    private void fazerPagamento(Pedido pedido, String numeroCartao){
+        Double valorConta = pedido.getValor();
+        Cartao cartaoSelecionado = this.cartaoService.buscarPeloNumeroCartaoClienteId(numeroCartao,pedido.getCliente().getId());
+
+        cartaoSelecionado.setSaldo(cartaoSelecionado.getLimite());
+
+        if (cartaoSelecionado.getSaldo() >= valorConta){
+            try {
+                cartaoSelecionado.setLimiteUtilizado(cartaoSelecionado.getLimiteUtilizado() + valorConta);
+                cartaoSelecionado.setSaldo(cartaoSelecionado.getLimite() - cartaoSelecionado.getLimiteUtilizado());
+                this.cartaoService.atualizar(cartaoSelecionado.getId(), cartaoSelecionado);
+                pedido.setPago(true);
+            }catch (Exception e){
+                throw  new FalhaNoPagamentoException();
+            }
+        }
+        else {
+            throw  new SaldoInsuficienteException();
+        }
+    }
     private Double calcularValorConta(List<Prato> pratosPedidos) {
         Double total = 0.0;
 

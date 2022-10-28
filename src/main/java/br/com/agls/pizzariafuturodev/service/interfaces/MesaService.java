@@ -10,7 +10,7 @@ public interface MesaService {
     Mesa atualizar(Long id, Mesa mesa);
     Mesa buscar(Long id);
     List<Mesa> listar();
-    String excluir(Long id);
+    void excluir(Long id);
     List<Mesa> listarAtivas();
 
 }

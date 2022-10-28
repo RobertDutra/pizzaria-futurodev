@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -32,22 +33,17 @@ public class MesaServiceImpl implements MesaService {
 
     @Override
     public Mesa atualizar(Long id, Mesa mesa) {
-        Optional<Mesa> mesa1 = mesaRepository.findById(id);
-        if (mesa1.isPresent()){
-            BeanUtils.copyProperties(mesa, mesa1.get(),"id");
-//            mesa.setId(mesa1.get().getId());
-            return this.mesaRepository.save(mesa1.get());
-        }
-        return null;
+        Mesa mesaBuscada = this.buscar(id);
+        BeanUtils.copyProperties(mesa, mesaBuscada,"id");
+        return this.mesaRepository.save(mesaBuscada);
     }
 
     @Override
     public Mesa buscar(Long id) {
-        Optional<Mesa> mesa = this.mesaRepository.findById(id);
-        if (mesa.isPresent()){
-            return mesa.get();
-        }
-        return null;
+        return this.mesaRepository.findById(id).orElseThrow(() ->
+        {throw  new EntityNotFoundException("Mesa com id " + id + " não encontrada!");
+        });
+
     }
 
     @Override
@@ -76,12 +72,8 @@ public class MesaServiceImpl implements MesaService {
     }
 
     @Override
-    public String excluir(Long id) {
-        Optional<Mesa> mesa = this.mesaRepository.findById(id);
-        if(mesa.isPresent()) {
-            mesaRepository.delete(mesa.get());
-            return "Excluido com sucesso";
-        }
-        return "Id não encontrado";
+    public void excluir(Long id) {
+        this.buscar(id);
+        this.mesaRepository.deleteById(id);
     }
 }

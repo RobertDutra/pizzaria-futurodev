@@ -12,5 +12,6 @@ public interface PedidoService {
     public List<Pedido> listar();
     public Pedido buscar(Long id);
     public String deletar(Long id);
+    public Pedido fecharConta(Long idPedido, String numeroCartao);
 
 }

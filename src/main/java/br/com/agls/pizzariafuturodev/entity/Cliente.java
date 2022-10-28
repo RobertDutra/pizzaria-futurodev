@@ -3,6 +3,7 @@ package br.com.agls.pizzariafuturodev.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,28 +15,18 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Pedido {
+@Builder
+public class Cliente {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Mesa mesa;
-
-    private Double valor;
-
-    private boolean isPago;
-
-//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-//    @JsonManagedReference
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "pedido_prato",
-            joinColumns = @JoinColumn(name = "pedido_id"),
-            inverseJoinColumns = @JoinColumn(name = "prato_id"))
-    private List<Prato> pedidoPrato;
-
 //    @NotNull
-    @ManyToOne
-    private Cliente cliente;
+    private String nome;
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonManagedReference
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private List<Cartao> cartoes;
+
 }

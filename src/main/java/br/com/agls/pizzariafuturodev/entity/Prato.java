@@ -31,8 +31,8 @@ public class Prato {
     private Categoria categoria;
     // alter table add constraint forenig_key categoria references categoria(id);
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @JsonBackReference
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//    @JsonBackReference
     @ManyToMany(mappedBy = "pedidoPrato")
     private List<Pedido> pedido;
 }

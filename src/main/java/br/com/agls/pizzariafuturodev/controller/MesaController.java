@@ -17,37 +17,38 @@ public class MesaController {
     private MesaServiceImpl mesaServiceImpl;
 
     @PostMapping()
-    public ResponseEntity<Mesa> salvar(@RequestBody Mesa mesa){
+    public ResponseEntity<Mesa> salvar(@RequestBody Mesa mesa) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.mesaServiceImpl.salvar(mesa));
     }
 
     @GetMapping()
-    public ResponseEntity<List<Mesa>> lista(){
+    public ResponseEntity<List<Mesa>> lista() {
         return ResponseEntity.ok(this.mesaServiceImpl.listar());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Mesa> buscar(@PathVariable Long id){
+    public ResponseEntity<Mesa> buscar(@PathVariable Long id) {
         Mesa mesa = this.mesaServiceImpl.buscar(id);
-        if (mesa == null){
+        if (mesa == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.ok(mesa);
     }
 
     @GetMapping("/ativas")
-    public ResponseEntity<List<Mesa>> mesaAtivas(){
+    public ResponseEntity<List<Mesa>> mesaAtivas() {
         return ResponseEntity.ok(mesaServiceImpl.listarAtivas());
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
-    public Mesa mesa(@PathVariable Long id, @RequestBody Mesa mesa){
-        return mesaServiceImpl.atualizar(id,mesa);
+    public Mesa mesa(@PathVariable Long id, @RequestBody Mesa mesa) {
+        return mesaServiceImpl.atualizar(id, mesa);
     }
+
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{id}")
-    public String excluir(@PathVariable Long id){
-        return mesaServiceImpl.excluir(id);
+    public void excluir(@PathVariable Long id) {
+        this.mesaServiceImpl.excluir(id);
     }
 }
